@@ -1,0 +1,49 @@
+import java.nio.file.Paths
+
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "org.kravemir.gradle.j2js:GradleJ2JSPlugin:0.1.0-SNAPSHOT"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.kravemir.gradle.j2js'
+
+// create new task, which converts Java to JavaScript
+task createJavaScript(type: org.kravemir.gradle.j2js.J2JSTask) {
+    
+    // needs classes to be compiled first (autodetection/registration will be implemented later)
+    dependsOn "classes"
+
+    // output directory and output file name
+    outDir = "$buildDir/generated/"
+    targetFilename = "example.js"
+
+    // input classpath, where classes are being search to generate their JS counterparts
+    libraryClassPath = configurations.runtime
+
+    // register static method
+    methodAlias(
+            "getHelloWorld",
+            "examples.helloj2js.HelloWorld",
+            "getHelloWorldString",
+            "()Ljava.lang.String;",
+            null
+    )
+}
+
+task copyHtml(type: Copy) {
+    from "$projectDir/src/main/resources/"
+    into "$buildDir/generated/"
+}
+
+task constructPage {
+    dependsOn 'createJavaScript'
+    dependsOn 'copyHtml'
+}

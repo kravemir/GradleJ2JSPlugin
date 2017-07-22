@@ -1,0 +1,33 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group 'org.kravemir.gradle.j2js'
+version = '0.1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+
+    compile 'org.mozilla:rhino:1.7.7'
+    compile 'com.google.template:soy:2016-01-12'
+    compile 'com.vaadin:vaadin-sass-compiler:0.9.13'
+    compile 'org.teavm:teavm-core:0.4.3'
+    compile 'org.teavm:teavm-classlib:0.4.3'
+    compile 'org.teavm:teavm-maven-plugin:0.4.3'
+    compile 'com.github.marschall:path-classloader:0.1.0'
+
+    testCompile 'junit:junit:4.12'
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: mavenLocal().url)
+        }
+    }
+}
