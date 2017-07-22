@@ -1,8 +1,21 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.4"
+    }
+}
+
+apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'java'
+apply plugin: 'java-gradle-plugin'
 apply plugin: 'maven'
 
 group 'org.kravemir.gradle.j2js'
-version = '0.1.0-SNAPSHOT'
+version = '0.1.0'
 
 sourceCompatibility = 1.8
 
@@ -28,6 +41,20 @@ uploadArchives {
     repositories {
         mavenDeployer {
             repository(url: mavenLocal().url)
+        }
+    }
+}
+
+pluginBundle {
+    website = 'https://github.com/kravemir/GradleJ2JSPlugin'
+    vcsUrl = 'https://github.com/kravemir/GradleJ2JSPlugin'
+    description = 'Java to JavaScript compiler plugin'
+    tags = ['java', 'javascript', 'j2js', 'kravemir']
+
+    plugins {
+        j2jsPlugin {
+            id = 'org.kravemir.gradle.j2js'
+            displayName = 'J2JS Plugin'
         }
     }
 }
